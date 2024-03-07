@@ -1,0 +1,16 @@
+---
+- name: Installing keepalived
+  ansible.builtin.apt:
+    name: keepalived
+    state: present
+  become: true
+
+- name: Creating keepalived config
+  ansible.builtin.template:
+    src: keepalived.j2
+    dest: /etc/keepalived/keepalived.conf
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  notify: Reload keepalived

@@ -1,0 +1,9 @@
+---
+loadbalancers:
+  vars:
+    ansible_user: user
+  hosts:
+    lx-lb01:
+      role: "MASTER"
+    lx-lb02:
+      role: "BACKUP"

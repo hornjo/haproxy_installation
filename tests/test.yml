@@ -1,0 +1,34 @@
+---
+- name: Test haproxy-installation role
+  hosts: loadbalancers
+  roles:
+    - haproxy-installation
+  vars:
+    haproxy_installation_virtual_ip: 10.10.1.120
+    haproxy_installation_frontends:
+      - {name: k8s-api, binds: "*:6443", mode: tcp, backend: k8s-api}
+      - {name: k8s-ingress-http, binds: "*:80", mode: tcp, backend: k8s-ingress-http}
+      - {name: k8s-ingress-https, binds: "*:443", mode: tcp, backend: k8s-ingress-https}
+    haproxy_installation_backends:
+      - name: k8s-api
+        mode: tcp
+        balance_mode: roundrobin
+        port: 6443
+        endpoints:
+          - lx-k8s-ctl01
+          - lx-k8s-ctl02
+          - lx-k8s-ctl03
+      - name: k8s-ingress-http
+        mode: tcp
+        balance_mode: roundrobin
+        port: 30080
+        endpoints:
+          - lx-k8s-wrk01
+          - lx-k8s-wrk02
+      - name: k8s-ingress-https
+        mode: tcp
+        balance-mode: roundrobin
+        port: 30443
+        endpoints:
+          - lx-k8s-wrk01
+          - lx-k8s-wrk02

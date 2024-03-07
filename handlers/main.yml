@@ -1,0 +1,15 @@
+---
+# handlers file for haproxy-installation
+- name: Reload haproxy
+  ansible.builtin.systemd:
+    name: haproxy
+    state: restarted
+    enabled: true
+  become: true
+
+- name: Reload keepalived
+  ansible.builtin.systemd:
+    name: keepalived
+    state: restarted
+    enabled: true
+  become: true

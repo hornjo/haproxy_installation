@@ -1,0 +1,23 @@
+global_defs {
+  router_id {{ ansible_facts.ansible_hostname }}
+}
+
+vrrp_script haproxy-check {
+  script "killall -0 haproxy"
+  interval 2
+  weight 2
+}
+
+vrrp_instance haproxy-vip {
+  state {{ hostvars.role }}
+  priority {%- if hostvars.role is "MASTER" %} 100 {%- else %} 101 {%- endif %}
+  interface {{ ansible_facts.default_ipv4.interface }}
+  virtual_router_id 50
+  advert_int 1
+  virtual_ipaddress {
+    {{ haproxy_installation_virtual_ip }}
+  }
+  track_script {
+    haproxy-check
+  }
+}
