@@ -27,7 +27,7 @@
           - lx-k8s-wrk02
       - name: k8s-ingress-https
         mode: tcp
-        balance-mode: roundrobin
+        balance_mode: roundrobin
         port: 30443
         endpoints:
           - lx-k8s-wrk01

@@ -1,2 +1,6 @@
 ---
-# tasks file for haproxy-installation
+- name: Setup haproxy
+  ansible.builtin.include_tasks: setup-haproxy.yml
+
+- name: Setup keepalived
+  ansible.builtin.include_tasks: setup-keepalived.yml
