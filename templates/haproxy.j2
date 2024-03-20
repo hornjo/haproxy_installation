@@ -17,14 +17,15 @@ defaults
         timeout client 50000
         timeout server 50000
 
-{%- for item in haproxy_installation_frontends %}
+{% for item in haproxy_installation_frontends %}
 frontend {{ item.name }}
     mode {{ item.mode }}
     option tcplog
     default_backend {{ item.backend }}
-{%- endfor %}
 
-{%- for item in haproxy_installation_backends %}
+{% endfor %}
+
+{% for item in haproxy_installation_backends %}
 backend {{ item.name }}
     mode {{ item.mode }}
     option tcplog
@@ -34,4 +35,5 @@ backend {{ item.name }}
     {% for host in item.endpoints -%}
     server {{ host }} {{ host }}:{{ item.port }} check
     {% endfor %}
-{%- endfor %}
+
+{% endfor %}

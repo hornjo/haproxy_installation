@@ -4,6 +4,14 @@
     name: keepalived
     state: present
   become: true
+  when: ansible_os_family == 'Debian'
+
+- name: Installing keepalived
+  ansible.builtin.dnf:
+    name: keepalived
+    state: present
+  become: true
+  when: ansible_os_family == 'RedHat'
 
 - name: Creating keepalived config
   ansible.builtin.template:

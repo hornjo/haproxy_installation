@@ -1,15 +1,17 @@
 ---
-- name: Update all packages
-  ansible.builtin.apt:
-    update_cache: true
-    upgrade: true
-  become: true
-
 - name: Installing haproxy
   ansible.builtin.apt:
     name: haproxy
     state: present
   become: true
+  when: ansible_os_family == 'Debian'
+
+- name: Installing haproxy
+  ansible.builtin.dnf:
+    name: haproxy
+    state: present
+  become: true
+  when: ansible_os_family == 'RedHat'
 
 - name: Creating haproxy config
   ansible.builtin.template:
