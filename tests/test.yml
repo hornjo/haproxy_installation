@@ -15,20 +15,21 @@
         balance_mode: roundrobin
         port: 6443
         endpoints:
-          - {server: lx-k8s-ctl01, ip: 10.10.1.101}
-          - {server: lx-k8s-ctl02, ip: 10.10.1.102}
-          - {server: lx-k8s-ctl03, ip: 10.10.1.103}
+          - "lx-k8s-ctl01 10.10.1.101"
+          - "lx-k8s-ctl02 10.10.1.102"
+          - "lx-k8s-ctl03 10.10.1.103"
       - name: k8s-ingress-http
         mode: tcp
         balance_mode: roundrobin
         port: 30080
         endpoints:
-          - {server: lx-k8s-wrk01, ip: 10.10.1.111}
-          - {server: lx-k8s-wrk02, ip: 10.10.1.112}
+          - "lx-k8s-wrk01 10.10.1.111"
+          - "lx-k8s-wrk02 10.10.1.112"
       - name: k8s-ingress-https
         mode: tcp
         balance_mode: roundrobin
         port: 30443
         endpoints:
-          - {server: lx-k8s-wrk01, ip: 10.10.1.111}
-          - {server: lx-k8s-wrk02, ip: 10.10.1.112}
+          - "lx-k8s-wrk01 10.10.1.111"
+          - "lx-k8s-wrk02 10.10.1.112"
+
