@@ -19,7 +19,9 @@ defaults
 
 {% for item in haproxy_installation_frontends %}
 frontend {{ item.name }}
+    {% if item.mode is defined %}
     mode {{ item.mode }}
+    {% endif %}
     bind {{ item.binds }}
     option tcplog
     default_backend {{ item.backend }}
