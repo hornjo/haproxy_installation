@@ -19,20 +19,26 @@ defaults
 
 {% for item in haproxy_installation_frontends %}
 frontend {{ item.name }}
-    {% if item.mode is defined %}
+    {% if item.mode is defined -%}
     mode {{ item.mode }}
-    {% endif %}
-    bind {{ item.binds }}
+    {% if item.mode == "tcp" -%}
     option tcplog
+    {% endif -%}
+    {% endif -%}
+    bind {{ item.binds }}
     default_backend {{ item.backend }}
 
 {% endfor %}
 
 {% for item in haproxy_installation_backends %}
 backend {{ item.name }}
+    {% if item.mode is defined -%}
     mode {{ item.mode }}
+    {% if item.mode == "tcp" -%}
     option tcplog
     option tcp-check
+    {% endif -%}
+    {% endif -%}
     balance {{ item.balance_mode }}
     default-server inter 10s downinter 5s rise 2 fall 2 slowstart 60s maxconn 250 maxqueue 256 weight 100
     {% for host in item.endpoints -%}
