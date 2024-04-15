@@ -1,5 +1,8 @@
 global_defs {
   router_id {{ inventory_hostname }}
+  vrrp_skip_check_adv_addr
+  vrrp_garp_interval 0
+  vrrp_gna_interval 0
 }
 
 vrrp_script haproxy-check {
@@ -9,12 +12,20 @@ vrrp_script haproxy-check {
 }
 
 vrrp_instance haproxy-vip {
-  state {{ hostvars[inventory_hostname]['role'] }}
-  priority {%- if hostvars[inventory_hostname]['role'] == 'MASTER' %} 100 {%- else %} 101 {%- endif %}
-  
+  state BACKUP
+  priority 100
   interface {{ ansible_facts['default_ipv4']['interface'] }}
-  virtual_router_id 50
+  virtual_router_id 60
   advert_int 1
+  authentication {
+    auth_type PASS
+    auth_pass 1111
+  }
+  unicast_src_ip {{ ansible_facts['default_ipv4']['address'] }}
+  unicast_peer {
+    {% if ansible_facts['default_ipv4']['address'] == hostvars[groups['loadbalancers'][1]]['ansible_facts']['default_ipv4']['address'] %} {{ hostvars[groups['loadbalancers'][0]]['ansible_facts']['default_ipv4']['address'] }} {%- else %} {{ hostvars[groups['loadbalancers'][1]]['ansible_facts']['default_ipv4']['address'] }} 
+    {% endif -%}
+  }
   virtual_ipaddress {
     {{ haproxy_installation_virtual_ip }}
   }
