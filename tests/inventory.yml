@@ -3,7 +3,15 @@ loadbalancers:
   vars:
     ansible_user: user
   hosts:
-    lx-lb01:
+    lx-rke2-ctl01:
+      ansible_host: 192.168.178.21
       role: "MASTER"
-    lx-lb02:
+      prio: "100"
+    lx-rke2-ctl02:
+      ansible_host: 192.168.178.22
       role: "BACKUP"
+      prio: "99"
+    lx-rke2-ctl03:
+      ansible_host: 192.168.178.23
+      role: "BACKUP"
+      prio: "98"

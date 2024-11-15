@@ -4,32 +4,16 @@
   roles:
     - haproxy-installation
   vars:
-    haproxy_installation_virtual_ip: 10.10.1.120
+    haproxy_installation_virtual_ip: 192.168.178.20
     haproxy_installation_frontends:
       - {name: k8s-api, binds: "*:6443", mode: tcp, backend: k8s-api}
-      - {name: k8s-ingress-http, binds: "*:80", mode: tcp, backend: k8s-ingress-http}
-      - {name: k8s-ingress-https, binds: "*:443", mode: tcp, backend: k8s-ingress-https}
     haproxy_installation_backends:
       - name: k8s-api
         mode: tcp
         balance_mode: roundrobin
         port: 6443
         endpoints:
-          - "lx-k8s-ctl01 10.10.1.101"
-          - "lx-k8s-ctl02 10.10.1.102"
-          - "lx-k8s-ctl03 10.10.1.103"
-      - name: k8s-ingress-http
-        mode: tcp
-        balance_mode: roundrobin
-        port: 30080
-        endpoints:
-          - "lx-k8s-wrk01 10.10.1.111"
-          - "lx-k8s-wrk02 10.10.1.112"
-      - name: k8s-ingress-https
-        mode: tcp
-        balance_mode: roundrobin
-        port: 30443
-        endpoints:
-          - "lx-k8s-wrk01 10.10.1.111"
-          - "lx-k8s-wrk02 10.10.1.112"
+          - "lx-rke2-ctl01 192.168.178.21"
+          - "lx-rke2-ctl02 192.168.178.22"
+          - "lx-rke2-ctl03 192.168.178.23"
 
