@@ -12,7 +12,7 @@ vrrp_script haproxy-check {
 }
 
 vrrp_instance haproxy-vip {
-  state BACKUP
+  state {{ role }}
   priority 100
   interface {{ ansible_facts['default_ipv4']['interface'] }}
   virtual_router_id 60
@@ -21,10 +21,13 @@ vrrp_instance haproxy-vip {
     auth_type PASS
     auth_pass 1111
   }
-  unicast_src_ip {{ ansible_facts['default_ipv4']['address'] }}
+  unicast_src_ip {{ ansible_host }}
   unicast_peer {
-    {% if ansible_facts['default_ipv4']['address'] == hostvars[groups['loadbalancers'][1]]['ansible_facts']['default_ipv4']['address'] %} {{ hostvars[groups['loadbalancers'][0]]['ansible_facts']['default_ipv4']['address'] }} {%- else %} {{ hostvars[groups['loadbalancers'][1]]['ansible_facts']['default_ipv4']['address'] }} 
+    {% for host in groups['loadbalancers'] -%}
+    {% if host != inventory_hostname %}
+    {{- hostvars[host]['ansible_host'] }}
     {% endif -%}
+    {%- endfor -%}
   }
   virtual_ipaddress {
     {{ haproxy_installation_virtual_ip }}

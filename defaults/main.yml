@@ -1,2 +1,2 @@
 ---
-haproxy_installation_virtual_ip: 10.10.1.120
+haproxy_installation_virtual_ip: ""
