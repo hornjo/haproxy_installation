@@ -1,2 +1,17 @@
 ---
-haproxy_installation_virtual_ip: ""
+haproxy_installation_frontends:
+  - { name: k8s-api, binds: "*:8443", mode: tcp, backend: k8s-api }
+haproxy_installation_backends:
+  - name: k8s-api
+    mode: tcp
+    balance_mode: roundrobin
+    port: 6443
+    endpoints:
+      - "control-plane-0 10.10.0.11"
+      - "control-plane-1 10.10.0.12"
+      - "control-plane-2 10.10.0.13"
+
+haproxy_installation_keepalived_notify_master: ""
+haproxy_installation_keepalived_virtual_ip_interface: "eth0"
+haproxy_installation_keepalived_failover_interface: "eth0"
+haproxy_installation_keepalived_token: "DefaultPassword123!"

@@ -3,6 +3,7 @@
   ansible.builtin.apt:
     name: keepalived
     state: present
+    update_cache: true
   become: true
   when: ansible_os_family == 'Debian'
 
@@ -19,6 +20,14 @@
     dest: /etc/keepalived/keepalived.conf
     owner: root
     group: root
-    mode: '0644'
+    mode: "0644"
   become: true
   notify: Reload keepalived
+
+- name: Copy failover script
+  ansible.builtin.copy:
+    src: "{{ haproxy_installation_keepalived_failover_file_path }}"
+    dest: /etc/keepalived/
+    mode: "0750"
+  become: true
+  when: haproxy_installation_keepalived_failover_file_path is defined

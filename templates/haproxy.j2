@@ -1,7 +1,6 @@
 global
     log /dev/log  local0 warning
     chroot      /var/lib/haproxy
-    pidfile     /var/run/haproxy.pid
     maxconn     4000
     user        haproxy
     group       haproxy
@@ -12,6 +11,7 @@ global
 defaults
   log global
   option  httplog
+  option  tcplog
   option  dontlognull
         timeout connect 5000
         timeout client 50000
@@ -22,7 +22,6 @@ frontend {{ item.name }}
     {% if item.mode is defined -%}
     mode {{ item.mode }}
     {% if item.mode == "tcp" -%}
-    option tcplog
     {% endif -%}
     {% endif -%}
     bind {{ item.binds }}
@@ -35,7 +34,6 @@ backend {{ item.name }}
     {% if item.mode is defined -%}
     mode {{ item.mode }}
     {% if item.mode == "tcp" -%}
-    option tcplog
     option tcp-check
     {% endif -%}
     {% endif -%}

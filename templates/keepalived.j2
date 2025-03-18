@@ -1,38 +1,44 @@
 global_defs {
-  router_id {{ inventory_hostname }}
-  vrrp_skip_check_adv_addr
-  vrrp_garp_interval 0
-  vrrp_gna_interval 0
+  script_user root
+  enable_script_security
+  dynamic_interfaces
 }
 
-vrrp_script haproxy-check {
-  script "killall -0 haproxy"
+interface_up_down_delays {
+  {{ haproxy_installation_keepalived_failover_interface }} 5
+}
+
+vrrp_script check_haproxy {
+  script "/usr/bin/pgrep haproxy"
   interval 2
   weight 2
 }
 
 vrrp_instance haproxy-vip {
-  state {{ role }}
+  state MASTER
   priority 100
-  interface {{ ansible_facts['default_ipv4']['interface'] }}
+  interface {{ haproxy_installation_keepalived_failover_interface }}
   virtual_router_id 60
   advert_int 1
   authentication {
     auth_type PASS
-    auth_pass 1111
+    auth_pass {{ haproxy_installation_keepalived_token }}
   }
   unicast_src_ip {{ ansible_host }}
   unicast_peer {
-    {% for host in groups['loadbalancers'] -%}
+    {% for host in ansible_play_hosts_all -%}
     {% if host != inventory_hostname %}
     {{- hostvars[host]['ansible_host'] }}
     {% endif -%}
     {%- endfor -%}
   }
   virtual_ipaddress {
-    {{ haproxy_installation_virtual_ip }}
+    {{ haproxy_installation_keepalived_virtual_ip }} dev {{ haproxy_installation_keepalived_virtual_ip_interface }}
   }
   track_script {
-    haproxy-check
+    check_haproxy
   }
+  {% if haproxy_installation_keepalived_notify_master != "" %}
+  notify_master {{ haproxy_installation_keepalived_notify_master }}
+  {% endif -%}
 }

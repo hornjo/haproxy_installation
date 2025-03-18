@@ -1,19 +1,39 @@
 ---
 - name: Test haproxy-installation role
-  hosts: loadbalancers
+  hosts: loadbalancer
   roles:
     - haproxy-installation
   vars:
-    haproxy_installation_virtual_ip: 192.168.178.20
+    haproxy_installation_keepalived_virtual_ip_interface: "eth0"
+    haproxy_installation_keepalived_failover_interface: "enp7s0"
+    haproxy_installation_keepalived_notify_master: "/etc/keepalived/my-failover-script"
+    haproxy_installation_keepalived_failover_file_path: "{{ playbook_dir }}/../inventories/haproxy/failover.sh"
     haproxy_installation_frontends:
-      - {name: k8s-api, binds: "*:6443", mode: tcp, backend: k8s-api}
+      - { name: k8s-api, binds: "*:8443", mode: tcp, backend: k8s-api }
+      - { name: k8s-ingress-http, binds: "*:80", mode: tcp, backend: k8s-ingress-http }
+      - { name: k8s-ingress-https, binds: "*:443", mode: tcp, backend: k8s-ingress-https }
     haproxy_installation_backends:
       - name: k8s-api
         mode: tcp
         balance_mode: roundrobin
         port: 6443
         endpoints:
-          - "lx-rke2-ctl01 192.168.178.21"
-          - "lx-rke2-ctl02 192.168.178.22"
-          - "lx-rke2-ctl03 192.168.178.23"
-
+          - "control-plane-0 10.10.0.11"
+          - "control-plane-1 10.10.0.12"
+          - "control-plane-2 10.10.0.13"
+      - name: ingress-http
+        mode: tcp
+        balance_mode: roundrobin
+        port: 30080
+        endpoints:
+          - "control-plane-0 10.10.0.11"
+          - "control-plane-1 10.10.0.12"
+          - "control-plane-2 10.10.0.13"
+      - name: ingress-https
+        mode: tcp
+        balance_mode: roundrobin
+        port: 30443
+        endpoints:
+          - "control-plane-0 10.10.0.11"
+          - "control-plane-1 10.10.0.12"
+          - "control-plane-2 10.10.0.13"
