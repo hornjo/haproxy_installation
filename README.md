@@ -1,19 +1,17 @@
 # Role Name
 
-A brief description of the role goes here.
+A role to install haproxy with keepalived in various situations and configurations.
 
 ## Requirements
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+- ansible-core
 
 ## Role Variables
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
-
-```YAML
-haproxy_installation_keepalived_notify_master: ""
-haproxy_installation_keepalived_failover_file_path: ""
-```
+- **haproxy_installation_keepalived_notify_master**: Commands or script executed when the master gets notified, only optional.
+- **haproxy_installation_keepalived_failover_file_path**: Path of a file which could optionally be copied to the remote host. This allows to copy a script which could get used as a failover script in combination with the notify_master.
+- **haproxy_installation_keepalived_unicast_ip**: Sets the ip on which the keepalived listens, only optional. If not defined the inventory IPs/hostname will be used.
+- **haproxy_installation_keepalived_unicast_peers**: A list of ips of the keepalived peers, only optional. If not defined the inventory IPs/hostname will be used.
 
 ## Dependencies
 
@@ -29,8 +27,18 @@ Including an example of how to use your role (for instance, with variables passe
 
 ## License
 
-BSD
+Apache 2.0
 
-## Author Information
+## Contribute
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+1. Follow the ansible-lint guidelines and run ansible-lint in the root of the repo.
+
+```shell
+ansible-lint
+```
+
+2. Make sure that the role does succeed, when using the `--check` flag.
+
+```shell
+ansible-playbook tests/test.yml --check
+```

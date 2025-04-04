@@ -2,7 +2,7 @@
 - name: Test haproxy-installation role
   hosts: loadbalancer
   roles:
-    - haproxy-installation
+    - haproxy_installation
   vars:
     haproxy_installation_keepalived_virtual_ip_interface: "eth0"
     haproxy_installation_keepalived_failover_interface: "enp7s0"

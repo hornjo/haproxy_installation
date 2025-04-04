@@ -24,13 +24,19 @@ vrrp_instance haproxy-vip {
     auth_type PASS
     auth_pass {{ haproxy_installation_keepalived_token }}
   }
-  unicast_src_ip {{ ansible_host }}
+  unicast_src_ip {{ unicast_ip }}
   unicast_peer {
+    {% if haproxy_installation_keepalived_unicast_peers != '' %}
+    {% for host in haproxy_installation_keepalived_unicast_peers -%}
+    {{ host }}
+    {%- endfor -%}
+    {% else %}
     {% for host in ansible_play_hosts_all -%}
     {% if host != inventory_hostname %}
     {{- hostvars[host]['ansible_host'] }}
     {% endif -%}
     {%- endfor -%}
+    {% endif %}
   }
   virtual_ipaddress {
     {{ haproxy_installation_keepalived_virtual_ip }} dev {{ haproxy_installation_keepalived_virtual_ip_interface }}

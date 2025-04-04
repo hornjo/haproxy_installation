@@ -21,6 +21,8 @@
     owner: root
     group: root
     mode: "0644"
+  vars:
+    unicast_ip: "{{ haproxy_installation_keepalived_unicast_ip | default(ansible_host) }}"
   become: true
   notify: Reload keepalived
 
