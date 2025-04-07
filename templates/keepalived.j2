@@ -15,8 +15,12 @@ vrrp_script check_haproxy {
 }
 
 vrrp_instance haproxy-vip {
-  state MASTER
-  priority 100
+  state {% if inventory_hostname == groups['loadbalancer'][0] %}MASTER
+  {% else %}BACKUP
+  {% endif -%}
+  priority {% if inventory_hostname == groups['loadbalancer'][0] %}100
+  {% else %}99
+  {% endif -%}
   interface {{ haproxy_installation_keepalived_failover_interface }}
   virtual_router_id 60
   advert_int 1
@@ -27,16 +31,16 @@ vrrp_instance haproxy-vip {
   unicast_src_ip {{ unicast_ip }}
   unicast_peer {
     {% if haproxy_installation_keepalived_unicast_peers != '' %}
-    {% for host in haproxy_installation_keepalived_unicast_peers -%}
+    {%- for host in haproxy_installation_keepalived_unicast_peers %}
     {{ host }}
-    {%- endfor -%}
-    {% else %}
-    {% for host in ansible_play_hosts_all -%}
+    {% endfor -%}
+    {% else -%}
+    {%- for host in ansible_play_hosts_all %}
     {% if host != inventory_hostname %}
-    {{- hostvars[host]['ansible_host'] }}
+    {{ hostvars[host]['ansible_host'] }}
     {% endif -%}
-    {%- endfor -%}
-    {% endif %}
+    {% endfor -%}
+    {% endif -%}
   }
   virtual_ipaddress {
     {{ haproxy_installation_keepalived_virtual_ip }} dev {{ haproxy_installation_keepalived_virtual_ip_interface }}

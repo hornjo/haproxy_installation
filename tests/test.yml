@@ -5,35 +5,36 @@
     - haproxy_installation
   vars:
     haproxy_installation_keepalived_virtual_ip_interface: "eth0"
-    haproxy_installation_keepalived_failover_interface: "enp7s0"
-    haproxy_installation_keepalived_notify_master: "/etc/keepalived/my-failover-script"
-    haproxy_installation_keepalived_failover_file_path: "{{ playbook_dir }}/../inventories/haproxy/failover.sh"
+    haproxy_installation_keepalived_virtual_ip: "10.10.0.80"
+    haproxy_installation_keepalived_failover_interface: "ens19"
+    haproxy_installation_keepalived_notify_master: "/etc/keepalived/failover.sh"
+    haproxy_installation_keepalived_failover_file_path: "{{ playbook_dir }}/failover.sh"
     haproxy_installation_frontends:
-      - { name: k8s-api, binds: "*:8443", mode: tcp, backend: k8s-api }
-      - { name: k8s-ingress-http, binds: "*:80", mode: tcp, backend: k8s-ingress-http }
-      - { name: k8s-ingress-https, binds: "*:443", mode: tcp, backend: k8s-ingress-https }
+      - { name: k8s-api, binds: "*:6443", mode: tcp, backend: k8s-api }
+      - { name: k8s-ingress-http, binds: "*:80", mode: tcp, backend: ingress-http }
+      - { name: k8s-ingress-https, binds: "*:443", mode: tcp, backend: ingress-https }
     haproxy_installation_backends:
       - name: k8s-api
         mode: tcp
         balance_mode: roundrobin
         port: 6443
         endpoints:
-          - "control-plane-0 10.10.0.11"
-          - "control-plane-1 10.10.0.12"
-          - "control-plane-2 10.10.0.13"
+          - "control-plane-0 10.10.0.31"
+          - "control-plane-1 10.10.0.32"
+          - "control-plane-2 10.10.0.33"
       - name: ingress-http
         mode: tcp
         balance_mode: roundrobin
         port: 30080
         endpoints:
-          - "control-plane-0 10.10.0.11"
-          - "control-plane-1 10.10.0.12"
-          - "control-plane-2 10.10.0.13"
+          - "control-plane-0 10.10.0.31"
+          - "control-plane-1 10.10.0.32"
+          - "control-plane-2 10.10.0.33"
       - name: ingress-https
         mode: tcp
         balance_mode: roundrobin
         port: 30443
         endpoints:
-          - "control-plane-0 10.10.0.11"
-          - "control-plane-1 10.10.0.12"
-          - "control-plane-2 10.10.0.13"
+          - "control-plane-0 10.10.0.31"
+          - "control-plane-1 10.10.0.32"
+          - "control-plane-2 10.10.0.33"

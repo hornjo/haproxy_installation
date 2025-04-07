@@ -10,8 +10,8 @@ A role to install haproxy with keepalived in various situations and configuratio
 
 - **haproxy_installation_keepalived_notify_master**: Commands or script executed when the master gets notified, only optional.
 - **haproxy_installation_keepalived_failover_file_path**: Path of a file which could optionally be copied to the remote host. This allows to copy a script which could get used as a failover script in combination with the notify_master.
-- **haproxy_installation_keepalived_unicast_ip**: Sets the ip on which the keepalived listens, only optional. If not defined the inventory IPs/hostname will be used.
-- **haproxy_installation_keepalived_unicast_peers**: A list of ips of the keepalived peers, only optional. If not defined the inventory IPs/hostname will be used.
+- **haproxy_installation_keepalived_unicast_ip**: Sets the ip on which the keepalived listens, only optional. If not defined the inventory IPs/hostname will be used. Should be used as host var!
+- **haproxy_installation_keepalived_unicast_peers**: A list of ips of the keepalived peers, only optional. If not defined the inventory IPs/hostname will be used. Should be used as host var!
 
 ## Dependencies
 

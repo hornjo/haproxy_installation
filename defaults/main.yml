@@ -13,5 +13,6 @@ haproxy_installation_backends:
 
 haproxy_installation_keepalived_notify_master: ""
 haproxy_installation_keepalived_virtual_ip_interface: "eth0"
-haproxy_installation_keepalived_failover_interface: "eth0"
+haproxy_installation_keepalived_failover_interface: "{{ haproxy_installation_keepalived_virtual_ip_interface }}"
 haproxy_installation_keepalived_token: "DefaultPassword123!"
+haproxy_installation_keepalived_unicast_peers: ""

@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
         "endfor",
-        "hostvars"
+        "hostvars",
+        "roundrobin"
     ]
 }
