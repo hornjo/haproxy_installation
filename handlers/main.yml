@@ -5,6 +5,7 @@
     name: haproxy
     state: restarted
     enabled: true
+  when: not ansible_check_mode
   become: true
 
 - name: Reload keepalived
@@ -12,4 +13,5 @@
     name: keepalived
     state: restarted
     enabled: true
+  when: not ansible_check_mode
   become: true
