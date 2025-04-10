@@ -5,11 +5,15 @@ loadbalancer:
   hosts:
     lx-lbl01:
       ansible_host: 10.10.0.81
+      haproxy_installation_keepalived_role: MASTER
+      haproxy_installation_keepalived_priority: 100
       haproxy_installation_keepalived_unicast_ip: "192.168.1.10"
       haproxy_installation_keepalived_unicast_peers:
         - "192.168.1.11"
     lx-lb02:
       ansible_host: 10.10.0.82
+      haproxy_installation_keepalived_role: BACKUP
+      haproxy_installation_keepalived_priority: 99
       haproxy_installation_keepalived_unicast_ip: "192.168.1.11"
       haproxy_installation_keepalived_unicast_peers:
         - "192.168.1.10"

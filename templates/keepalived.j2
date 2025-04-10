@@ -15,12 +15,8 @@ vrrp_script check_haproxy {
 }
 
 vrrp_instance haproxy-vip {
-  state {% if inventory_hostname == groups['loadbalancer'][0] %}MASTER
-  {% else %}BACKUP
-  {% endif -%}
-  priority {% if inventory_hostname == groups['loadbalancer'][0] %}100
-  {% else %}99
-  {% endif -%}
+  state {{ haproxy_installation_keepalived_role }}
+  priority {{ haproxy_installation_keepalived_priority }}
   interface {{ haproxy_installation_keepalived_failover_interface }}
   virtual_router_id 60
   advert_int 1
