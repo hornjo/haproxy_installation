@@ -26,6 +26,13 @@
   become: true
   notify: Reload keepalived
 
+- name: Copy check script
+  ansible.builtin.copy:
+    src: "check_health.sh"
+    dest: /etc/keepalived/check_health.sh
+    mode: "0755"
+  become: true
+
 - name: Copy failover script
   ansible.builtin.copy:
     src: "{{ haproxy_installation_keepalived_failover_file_path }}"

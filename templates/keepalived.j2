@@ -10,9 +10,9 @@ interface_up_down_delays {
 
 vrrp_script check_haproxy {
   script "/etc/keepalived/check_health.sh"
-  interval 2
-  timeout 3
-  weight -50
+  interval {{ haproxy_installation_keepalived_check_interval }}
+  timeout {{ haproxy_installation_keepalived_check_timeout }}
+  weight {{ haproxy_installation_keepalived_check_weight }}
 }
 
 vrrp_instance haproxy-vip {
