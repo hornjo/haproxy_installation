@@ -1,6 +1,7 @@
 ---
 haproxy_installation_frontends:
   - { name: k8s-api, binds: "*:8443", mode: tcp, backend: k8s-api }
+
 haproxy_installation_backends:
   - name: k8s-api
     mode: tcp
@@ -11,8 +12,14 @@ haproxy_installation_backends:
       - "control-plane-1 10.10.0.12"
       - "control-plane-2 10.10.0.13"
 
-haproxy_installation_keepalived_notify_master: ""
 haproxy_installation_keepalived_virtual_ip_interface: "eth0"
 haproxy_installation_keepalived_failover_interface: "{{ haproxy_installation_keepalived_virtual_ip_interface }}"
-haproxy_installation_keepalived_token: "DefaultPassword123!"
-haproxy_installation_keepalived_unicast_peers: ""
+
+haproxy_installation_keepalived_check_interval: "2"
+haproxy_installation_keepalived_check_timeout: "3"
+haproxy_installation_keepalived_check_weight: "-50"
+#
+# Suggested changes (24-04-2025):
+# haproxy_installation_keepalived_token: "" # Mandatory
+# haproxy_installation_keepalived_unicast_peers: "" # Optional
+# haproxy_installation_keepalived_notify_master: "" # Optional

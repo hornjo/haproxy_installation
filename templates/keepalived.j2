@@ -9,9 +9,10 @@ interface_up_down_delays {
 }
 
 vrrp_script check_haproxy {
-  script "/usr/bin/pgrep haproxy"
-  interval 2
-  weight 2
+  script "/etc/keepalived/check_health.sh"
+  interval {{ haproxy_installation_keepalived_check_interval }}
+  timeout {{ haproxy_installation_keepalived_check_timeout }}
+  weight {{ haproxy_installation_keepalived_check_weight }}
 }
 
 vrrp_instance haproxy-vip {
@@ -44,7 +45,7 @@ vrrp_instance haproxy-vip {
   track_script {
     check_haproxy
   }
-  {% if haproxy_installation_keepalived_notify_master != "" %}
+  {% if haproxy_installation_keepalived_notify_master is defined %}
   notify_master {{ haproxy_installation_keepalived_notify_master }}
   {% endif -%}
 }
