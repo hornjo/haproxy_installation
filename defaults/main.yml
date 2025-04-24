@@ -20,6 +20,6 @@ haproxy_installation_keepalived_check_timeout: "3"
 haproxy_installation_keepalived_check_weight: "-50"
 #
 # Suggested changes (24-04-2025):
-# haproxy_installation_keepalived_token: "" # Should be mandatory
-# haproxy_installation_keepalived_unicast_peers: "" # Should be mandatory
-# haproxy_installation_keepalived_notify_master: "" # Should be an optional parameter
+# haproxy_installation_keepalived_token: "" # Mandatory
+# haproxy_installation_keepalived_unicast_peers: "" # Optional
+# haproxy_installation_keepalived_notify_master: "" # Optional
