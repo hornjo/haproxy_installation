@@ -45,7 +45,7 @@ vrrp_instance haproxy-vip {
   track_script {
     check_haproxy
   }
-  {% if haproxy_installation_keepalived_notify_master != "" %}
+  {% if haproxy_installation_keepalived_notify_master is defined %}
   notify_master {{ haproxy_installation_keepalived_notify_master }}
   {% endif -%}
 }
